@@ -1,5 +1,8 @@
+import { MD5 } from 'crypto-js';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { saveGravatarEmail } from '../redux/actions';
 
 class Login extends Component {
   state = {
@@ -19,8 +22,11 @@ class Login extends Component {
     const apiResult = await fetch('https://opentdb.com/api_token.php?command=request')
       .then((response) => response.json())
       .then((data) => data);
-    console.log(apiResult);
     localStorage.setItem('token', apiResult.token);
+    const { email, name } = this.state;
+    const gravatarEmail = MD5(email).toString();
+    const { dispatch } = this.props;
+    dispatch(saveGravatarEmail({ name, gravatarEmail }));
     const { history } = this.props;
     history.push('/game');
   };
@@ -80,6 +86,7 @@ Login.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
-export default Login;
+export default connect()(Login);
