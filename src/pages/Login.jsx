@@ -25,6 +25,11 @@ class Login extends Component {
     history.push('/game');
   };
 
+  handleConfigClick = () => {
+    const { history } = this.props;
+    history.push('/configuracoes');
+  };
+
   validation = () => {
     const { email, name } = this.state;
     const emailTest = (/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/).test(email);
@@ -62,6 +67,9 @@ class Login extends Component {
         >
           Play
 
+        </button>
+        <button data-testid="btn-settings" onClick={ this.handleConfigClick }>
+          Configurações
         </button>
       </div>
     );
