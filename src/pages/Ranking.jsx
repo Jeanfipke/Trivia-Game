@@ -10,8 +10,8 @@ class Ranking extends Component {
     const rankingList = listItens.map(() => (
       <li key="ranking-list-item">
         <img src="" alt="" />
-        <h5 data-testid={`player-name-${index}`}>Nome</h5>
-        <p data-testid={`player-score-${index}`}>Pontuação</p>
+        <h5 data-testid={ `player-name-${index}` }>Nome</h5>
+        <p data-testid={ `player-score-${index}` }>Pontuação</p>
       </li>
     ));
 
@@ -19,7 +19,7 @@ class Ranking extends Component {
       <div>
         <h1 data-testid="ranking-title">Ranking</h1>
         <button
-          //REQ 18
+          // REQ 18
           data-testid="btn-go-home"
           onClick={ this.handleClick }
           type="button"
@@ -27,7 +27,7 @@ class Ranking extends Component {
           Ir ao início
         </button>
         <div>
-          {/*REQ 19 */}
+          {/* REQ 19 */}
           <ul>
             { rankingList }
           </ul>
@@ -36,5 +36,11 @@ class Ranking extends Component {
     );
   }
 }
+
+Ranking.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
+};
 
 export default Ranking;

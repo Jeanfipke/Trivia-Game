@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 
 class Feedback extends Component {
-    handleFeedbackPageButtons = ({ target }) => {
-      const { history } = this.props;
-      return target.id === 'play-again' ? history.push('/') : history.push('/ranking');
-    };
+  handleFeedbackPageButtons = ({ target }) => {
+    const { history } = this.props;
+    return target.id === 'play-again' ? history.push('/') : history.push('/ranking');
+  };
 
   render() {
     return (
-      <div> 
+      <div>
         <button
-          //REQ 15
+          // REQ 15
           data-testid="btn-play-again"
           id="play-again"
           onClick={ this.handleFeedbackPageButtons }
@@ -19,7 +19,7 @@ class Feedback extends Component {
           Play Again
         </button>
         <button
-         //REQ 16
+        // REQ 16
           data-testid="btn-ranking"
           id="ranking"
           onClick={ this.handleFeedbackPageButtons }
@@ -31,5 +31,11 @@ class Feedback extends Component {
     );
   }
 }
+
+Feedback.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
+};
 
 export default Feedback;
