@@ -8,6 +8,8 @@ class Game extends Component {
     questions: [],
     currQuestion: 0,
     shuffleAnswers: [],
+    timer: 30,
+    timerOver: false,
   };
 
   componentDidMount() {
@@ -23,7 +25,19 @@ class Game extends Component {
         localStorage.removeItem('token');
         history.push('/');
       });
+    const oneSec = 1000;
+    this.count = setInterval(() => this.timerFunction(), oneSec);
   }
+
+  timerFunction = () => {
+    const { timer } = this.state;
+    if (timer > 0) {
+      this.setState({ timer: timer - 1 });
+    } else {
+      this.setState({ timerOver: true });
+      clearInterval(this.count);
+    }
+  };
 
   // Função para randomizar a ordem das respostas
   handleSuffleAnswers = () => {
@@ -38,7 +52,7 @@ class Game extends Component {
   render() {
     // currQuestion é variavel que vai capturar em qual questão estamos atraves de um index que começa com 0, questions são todas as questões
     // a ideia é que com que passemos de uma questão pra outra mudar este currQuestion para mudar a questão que está sendo renderizada
-    const { questions, currQuestion, shuffleAnswers } = this.state;
+    const { questions, currQuestion, shuffleAnswers, timer, timerOver } = this.state;
     return (
       <div>
         <Header />
@@ -46,6 +60,8 @@ class Game extends Component {
           questions={ questions }
           currQuestion={ currQuestion }
           shuffleAnswers={ shuffleAnswers }
+          timerOver={ timerOver }
+          timer={ timer }
         />
       </div>
     );
