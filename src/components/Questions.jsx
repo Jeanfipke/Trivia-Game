@@ -2,13 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 class Questions extends Component {
-  // componentDidMount() {
-  //   const { questions } = this.props;
-  //   if (questions.length > 0) {
-  //     this.handleSuffleAnswers();
-  //   }
-  // }
-
+  // Função para tornar o data-testid responsivo
   dataTestIdResponsive = (answer) => {
     const { questions, currQuestion } = this.props;
     if (answer === questions[currQuestion].correct_answer) {
@@ -16,7 +10,6 @@ class Questions extends Component {
     }
     const findIncorrectAnswerIndex = questions[currQuestion]
       .incorrect_answers.findIndex((incorrect) => incorrect === answer);
-    console.log(findIncorrectAnswerIndex);
     return `wrong-answer-${findIncorrectAnswerIndex}`;
   };
 
@@ -27,6 +20,7 @@ class Questions extends Component {
       <div data-testid="answer-options">
         <p data-testid="question-category">{questions[currQuestion].category}</p>
         <p data-testid="question-text">{questions[currQuestion].question}</p>
+        {/* Se for uma multipla escolha tem essa estrutura */}
         { questions[currQuestion].type === 'multiple' ? (
           <div>
             <button data-testid={ this.dataTestIdResponsive(shuffleAnswers[0]) }>
@@ -46,6 +40,7 @@ class Questions extends Component {
             </button>
           </div>
         ) : (
+          // Se for uma boolean ela retorna esse formato de questão
           <div data-testid="answer-options">
             <button data-testid={ this.dataTestIdResponsive(shuffleAnswers[0]) }>
               {shuffleAnswers[0]}

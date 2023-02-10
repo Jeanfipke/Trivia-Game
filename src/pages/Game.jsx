@@ -16,7 +16,6 @@ class Game extends Component {
     fetch(`https://opentdb.com/api.php?amount=5&token=${token}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         if (data.response_code === 0) {
           this.setState({ questions: data.results }, this.handleSuffleAnswers);
           return;
@@ -26,16 +25,19 @@ class Game extends Component {
       });
   }
 
+  // Função para randomizar a ordem das respostas
   handleSuffleAnswers = () => {
     const { questions, currQuestion } = this.state;
     const answers = [...questions[currQuestion].incorrect_answers,
       questions[currQuestion].correct_answer];
-    const bla = 0.5;
-    const shuffleAnswers = answers.sort(() => Math.random() - bla);
+    const numberToRandomize = 0.5;
+    const shuffleAnswers = answers.sort(() => Math.random() - numberToRandomize);
     this.setState({ shuffleAnswers });
   };
 
   render() {
+    // currQuestion é variavel que vai capturar em qual questão estamos atraves de um index que começa com 0, questions são todas as questões
+    // a ideia é que com que passemos de uma questão pra outra mudar este currQuestion para mudar a questão que está sendo renderizada
     const { questions, currQuestion, shuffleAnswers } = this.state;
     return (
       <div>
