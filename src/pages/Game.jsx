@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Header from '../components/Header';
 import Questions from '../components/Questions';
+import { changeNextVisibility } from '../redux/actions';
 
 class Game extends Component {
   state = {
@@ -11,6 +12,7 @@ class Game extends Component {
     shuffleAnswers: [],
     timer: 30,
     timerOver: false,
+    isChoiced: false,
   };
 
   componentDidMount() {
@@ -40,20 +42,52 @@ class Game extends Component {
     }
   };
 
+  // tive que puxar pra ca essa logica de mudar o estado que define se eu ja selecionei alguma questão, pra poder zerar quando clickar em próximo
+  handleChoicedQuestion = () => {
+    this.setState({ isChoiced: true });
+  };
+
+  handleClickNext = () => {
+    const { currQuestion } = this.state;
+    const { history, dispatch } = this.props;
+    const maxIndexQuestion = 4;
+    // se for a ultima pergunta vai pra feedback
+    if (currQuestion === maxIndexQuestion) {
+      history.push('/feedback');
+      return;
+    }
+    // voltar ao estado inicial de timer de pergunta ja escolhida etc
+    this.setState({ currQuestion: currQuestion + 1,
+      timer: 30,
+      timerOver: false,
+      isChoiced: false });
+    // Retirar as cores dos botões
+    const buttons = document.querySelectorAll('.question-btn');
+    buttons.forEach((button) => {
+      button.classList.remove('correct-answer');
+      button.classList.remove('wrong-answer');
+    });
+    // Tornando o botão next invísivel dnv ja que mudou a questão
+    dispatch(changeNextVisibility(false));
+  };
+
   // Função para randomizar a ordem das respostas
   handleSuffleAnswers = () => {
-    const { questions, currQuestion } = this.state;
-    const answers = [...questions[currQuestion].incorrect_answers,
-      questions[currQuestion].correct_answer];
-    const numberToRandomize = 0.5;
-    const shuffleAnswers = answers.sort(() => Math.random() - numberToRandomize);
+    const { questions } = this.state;
+    const shuffleAnswers = questions.map((question) => {
+      const answers = [...question.incorrect_answers,
+        question.correct_answer];
+      const numberToRandomize = 0.5;
+      return answers.sort(() => Math.random() - numberToRandomize);
+    });
     this.setState({ shuffleAnswers });
   };
 
   render() {
     // currQuestion é variavel que vai capturar em qual questão estamos atraves de um index que começa com 0, questions são todas as questões
     // a ideia é que com que passemos de uma questão pra outra mudar este currQuestion para mudar a questão que está sendo renderizada
-    const { questions, currQuestion, shuffleAnswers, timer, timerOver } = this.state;
+    const { questions, currQuestion, shuffleAnswers, timer, timerOver,
+      isChoiced } = this.state;
     const { isNextVisible } = this.props;
     return (
       <div>
@@ -64,8 +98,17 @@ class Game extends Component {
           shuffleAnswers={ shuffleAnswers }
           timerOver={ timerOver }
           timer={ timer }
+          handleChoicedQuestion={ this.handleChoicedQuestion }
+          isChoiced={ isChoiced }
         />
-        { isNextVisible && <button data-testid="btn-next">Próxima</button>}
+        { isNextVisible && (
+          <button
+            data-testid="btn-next"
+            onClick={ this.handleClickNext }
+          >
+            Próxima
+          </button>
+        )}
       </div>
     );
   }
@@ -76,6 +119,7 @@ Game.propTypes = {
     push: PropTypes.func,
   }).isRequired,
   isNextVisible: PropTypes.bool.isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (globalState) => ({

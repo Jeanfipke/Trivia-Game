@@ -6,9 +6,6 @@ import './Questions.css';
 
 class Questions extends Component {
   // Função para tornar o data-testid responsivo
-  state = {
-    isChoiced: false,
-  };
 
   componentDidUpdate() {
     const { timerOver } = this.props;
@@ -41,8 +38,9 @@ class Questions extends Component {
 
   handleClick = ({ target }) => {
     this.showAnswers();
-    this.setState({ isChoiced: true });
-    const { timer, questions, currQuestion, dispatch } = this.props;
+    const { timer, questions, currQuestion, dispatch,
+      handleChoicedQuestion } = this.props;
+    handleChoicedQuestion();
     if (target.className === 'question-btn correct-answer') {
       let dificultyPoints;
       const hard = 3;
@@ -69,8 +67,8 @@ class Questions extends Component {
   };
 
   render() {
-    const { questions, currQuestion, shuffleAnswers, timerOver, timer } = this.props;
-    const { isChoiced } = this.state;
+    const { questions, currQuestion, shuffleAnswers, timerOver, timer,
+      isChoiced } = this.props;
     if (questions.length === 0 || shuffleAnswers.length === 0) return 'loading...';
     return (
       <div data-testid="answer-options">
@@ -81,37 +79,37 @@ class Questions extends Component {
           <div>
             <button
               onClick={ this.handleClick }
-              data-testid={ this.dataTestIdResponsive(shuffleAnswers[0]) }
+              data-testid={ this.dataTestIdResponsive(shuffleAnswers[currQuestion][0]) }
               className="question-btn"
               disabled={ isChoiced || timerOver }
             >
-              {shuffleAnswers[0]}
+              {shuffleAnswers[currQuestion][0]}
             </button>
             <button
               onClick={ this.handleClick }
-              data-testid={ this.dataTestIdResponsive(shuffleAnswers[1]) }
+              data-testid={ this.dataTestIdResponsive(shuffleAnswers[currQuestion][1]) }
               className="question-btn"
               disabled={ isChoiced || timerOver }
             >
-              {shuffleAnswers[1]}
+              {shuffleAnswers[currQuestion][1]}
 
             </button>
             <button
               onClick={ this.handleClick }
-              data-testid={ this.dataTestIdResponsive(shuffleAnswers[2]) }
+              data-testid={ this.dataTestIdResponsive(shuffleAnswers[currQuestion][2]) }
               className="question-btn"
               disabled={ isChoiced || timerOver }
             >
-              {shuffleAnswers[2]}
+              {shuffleAnswers[currQuestion][2]}
 
             </button>
             <button
               onClick={ this.handleClick }
-              data-testid={ this.dataTestIdResponsive(shuffleAnswers[3]) }
+              data-testid={ this.dataTestIdResponsive(shuffleAnswers[currQuestion][3]) }
               className="question-btn"
               disabled={ isChoiced || timerOver }
             >
-              {shuffleAnswers[3]}
+              {shuffleAnswers[currQuestion][3]}
 
             </button>
           </div>
@@ -120,19 +118,19 @@ class Questions extends Component {
           <div data-testid="answer-options">
             <button
               onClick={ this.handleClick }
-              data-testid={ this.dataTestIdResponsive(shuffleAnswers[0]) }
+              data-testid={ this.dataTestIdResponsive(shuffleAnswers[currQuestion][0]) }
               className="question-btn"
               disabled={ isChoiced || timerOver }
             >
-              {shuffleAnswers[0]}
+              {shuffleAnswers[currQuestion][0]}
             </button>
             <button
               onClick={ this.handleClick }
-              data-testid={ this.dataTestIdResponsive(shuffleAnswers[1]) }
+              data-testid={ this.dataTestIdResponsive(shuffleAnswers[currQuestion][1]) }
               className="question-btn"
               disabled={ isChoiced || timerOver }
             >
-              {shuffleAnswers[1]}
+              {shuffleAnswers[currQuestion][1]}
             </button>
           </div>
         )}
@@ -152,10 +150,12 @@ Questions.propTypes = {
     type: PropTypes.string,
     difficulty: PropTypes.string,
   })).isRequired,
-  shuffleAnswers: PropTypes.arrayOf(PropTypes.string).isRequired,
+  shuffleAnswers: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
   timerOver: PropTypes.bool.isRequired,
   timer: PropTypes.number.isRequired,
   dispatch: PropTypes.func.isRequired,
+  isChoiced: PropTypes.bool.isRequired,
+  handleChoicedQuestion: PropTypes.func.isRequired,
 };
 
 export default connect()(Questions);
