@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { sumPoints } from '../redux/actions';
+import { changeNextVisibility, sumPoints } from '../redux/actions';
 import './Questions.css';
 
 class Questions extends Component {
@@ -35,13 +35,15 @@ class Questions extends Component {
         button.classList.add('wrong-answer');
       }
     });
+    const { dispatch } = this.props;
+    dispatch(changeNextVisibility(true));
   };
 
   handleClick = ({ target }) => {
     this.showAnswers();
     this.setState({ isChoiced: true });
+    const { timer, questions, currQuestion, dispatch } = this.props;
     if (target.className === 'question-btn correct-answer') {
-      const { timer, questions, currQuestion, dispatch } = this.props;
       let dificultyPoints;
       const hard = 3;
       const medium = 2;

@@ -1,11 +1,12 @@
 import { combineReducers } from 'redux';
-import { SAVE_GRAVATAR_EMAIL, SUM_POINTS } from '../actions';
+import { CHANGE_NEXT_VISIBLITY, SAVE_GRAVATAR_EMAIL, SUM_POINTS } from '../actions';
 
 const INITIAL_STATE = {
   name: '',
   assertions: '',
   score: 0,
   gravatarEmail: '',
+  isNextVisible: false,
 };
 
 const reducer = (state = INITIAL_STATE, action) => {
@@ -20,6 +21,11 @@ const reducer = (state = INITIAL_STATE, action) => {
     return {
       ...state,
       score: state.score + action.payload,
+    };
+  case CHANGE_NEXT_VISIBLITY:
+    return {
+      ...state,
+      isNextVisible: action.payload,
     };
   default:
     return state;

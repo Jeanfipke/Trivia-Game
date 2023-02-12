@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Header from '../components/Header';
 import Questions from '../components/Questions';
 
@@ -53,6 +54,7 @@ class Game extends Component {
     // currQuestion é variavel que vai capturar em qual questão estamos atraves de um index que começa com 0, questions são todas as questões
     // a ideia é que com que passemos de uma questão pra outra mudar este currQuestion para mudar a questão que está sendo renderizada
     const { questions, currQuestion, shuffleAnswers, timer, timerOver } = this.state;
+    const { isNextVisible } = this.props;
     return (
       <div>
         <Header />
@@ -63,6 +65,7 @@ class Game extends Component {
           timerOver={ timerOver }
           timer={ timer }
         />
+        { isNextVisible && <button data-testid="btn-next">Próxima</button>}
       </div>
     );
   }
@@ -72,6 +75,11 @@ Game.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
+  isNextVisible: PropTypes.bool.isRequired,
 };
 
-export default Game;
+const mapStateToProps = (globalState) => ({
+  isNextVisible: globalState.player.isNextVisible,
+});
+
+export default connect(mapStateToProps)(Game);
