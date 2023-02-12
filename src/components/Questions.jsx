@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { changeNextVisibility, sumPoints } from '../redux/actions';
+import { changeNextVisibility, sumAssertions, sumPoints } from '../redux/actions';
 import './Questions.css';
 
 class Questions extends Component {
@@ -63,6 +63,7 @@ class Questions extends Component {
       const initialPoints = 10;
       const points = initialPoints + (timer * dificultyPoints);
       dispatch(sumPoints(points));
+      dispatch(sumAssertions());
     }
   };
 

@@ -3,16 +3,32 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 class Feedback extends Component {
+  state = {
+    feedback: '',
+  };
+
+  componentDidMount() {
+    const { assertions } = this.props;
+    const couldBeBetter = 3;
+    console.log(assertions);
+    if (assertions < couldBeBetter) {
+      this.setState({ feedback: 'Could be better...' });
+    } else {
+      this.setState({ feedback: 'Well Done!' });
+    }
+  }
+
   handleFeedbackPageButtons = ({ target }) => {
     const { history } = this.props;
     return target.id === 'play-again' ? history.push('/') : history.push('/ranking');
   };
 
   render() {
-    const { gravatarEmail, score, name } = this.props;
+    const { gravatarEmail, name, score } = this.props;
+    const { feedback } = this.state;
     return (
       <div>
-        <h1 data-testid="feedback-text">Feedback :D</h1>
+        <h1 data-testid="feedback-text">{feedback}</h1>
         <img src={ `https://www.gravatar.com/avatar/${gravatarEmail}` } alt="gravat" data-testid="header-profile-picture" />
         <p data-testid="header-player-name">{name}</p>
         <p data-testid="header-score">{score}</p>
@@ -46,12 +62,14 @@ Feedback.propTypes = {
   gravatarEmail: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   score: PropTypes.number.isRequired,
+  assertions: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = (globalState) => ({
   gravatarEmail: globalState.player.gravatarEmail,
   name: globalState.player.name,
   score: globalState.player.score,
+  assertions: globalState.player.assertions,
 });
 
 export default connect(mapStateToProps)(Feedback);
