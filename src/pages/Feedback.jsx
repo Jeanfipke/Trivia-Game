@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 class Feedback extends Component {
   handleFeedbackPageButtons = ({ target }) => {
@@ -8,9 +9,13 @@ class Feedback extends Component {
   };
 
   render() {
+    const { gravatarEmail, score, name } = this.props;
     return (
       <div>
         <h1 data-testid="feedback-text">Feedback :D</h1>
+        <img src={ `https://www.gravatar.com/avatar/${gravatarEmail}` } alt="gravat" data-testid="header-profile-picture" />
+        <p data-testid="header-player-name">{name}</p>
+        <p data-testid="header-score">{score}</p>
         <button
           // REQ 15
           data-testid="btn-play-again"
@@ -38,6 +43,15 @@ Feedback.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
+  gravatarEmail: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  score: PropTypes.number.isRequired,
 };
 
-export default Feedback;
+const mapStateToProps = (globalState) => ({
+  gravatarEmail: globalState.player.gravatarEmail,
+  name: globalState.player.name,
+  score: globalState.player.score,
+});
+
+export default connect(mapStateToProps)(Feedback);

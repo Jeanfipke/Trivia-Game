@@ -54,7 +54,6 @@ class Game extends Component {
     // se for a ultima pergunta vai pra feedback
     if (currQuestion === maxIndexQuestion) {
       history.push('/feedback');
-      return;
     }
     // voltar ao estado inicial de timer de pergunta ja escolhida etc
     this.setState({ currQuestion: currQuestion + 1,
