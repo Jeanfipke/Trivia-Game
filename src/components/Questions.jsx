@@ -1,9 +1,14 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { sumPoints } from '../redux/actions';
 import './Questions.css';
 
 class Questions extends Component {
   // Função para tornar o data-testid responsivo
+  state = {
+    isChoiced: false,
+  };
 
   componentDidUpdate() {
     const { timerOver } = this.props;
@@ -32,12 +37,38 @@ class Questions extends Component {
     });
   };
 
-  handleClick = () => {
+  handleClick = ({ target }) => {
     this.showAnswers();
+    this.setState({ isChoiced: true });
+    if (target.className === 'question-btn correct-answer') {
+      const { timer, questions, currQuestion, dispatch } = this.props;
+      let dificultyPoints;
+      const hard = 3;
+      const medium = 2;
+      const easy = 1;
+      switch (questions[currQuestion].difficulty) {
+      case 'hard':
+        dificultyPoints = hard;
+        break;
+      case 'medium':
+        dificultyPoints = medium;
+        break;
+      case 'easy':
+        dificultyPoints = easy;
+        break;
+
+      default:
+        break;
+      }
+      const initialPoints = 10;
+      const points = initialPoints + (timer * dificultyPoints);
+      dispatch(sumPoints(points));
+    }
   };
 
   render() {
     const { questions, currQuestion, shuffleAnswers, timerOver, timer } = this.props;
+    const { isChoiced } = this.state;
     if (questions.length === 0 || shuffleAnswers.length === 0) return 'loading...';
     return (
       <div data-testid="answer-options">
@@ -50,7 +81,7 @@ class Questions extends Component {
               onClick={ this.handleClick }
               data-testid={ this.dataTestIdResponsive(shuffleAnswers[0]) }
               className="question-btn"
-              disabled={ timerOver }
+              disabled={ isChoiced || timerOver }
             >
               {shuffleAnswers[0]}
             </button>
@@ -58,7 +89,7 @@ class Questions extends Component {
               onClick={ this.handleClick }
               data-testid={ this.dataTestIdResponsive(shuffleAnswers[1]) }
               className="question-btn"
-              disabled={ timerOver }
+              disabled={ isChoiced || timerOver }
             >
               {shuffleAnswers[1]}
 
@@ -67,7 +98,7 @@ class Questions extends Component {
               onClick={ this.handleClick }
               data-testid={ this.dataTestIdResponsive(shuffleAnswers[2]) }
               className="question-btn"
-              disabled={ timerOver }
+              disabled={ isChoiced || timerOver }
             >
               {shuffleAnswers[2]}
 
@@ -76,7 +107,7 @@ class Questions extends Component {
               onClick={ this.handleClick }
               data-testid={ this.dataTestIdResponsive(shuffleAnswers[3]) }
               className="question-btn"
-              disabled={ timerOver }
+              disabled={ isChoiced || timerOver }
             >
               {shuffleAnswers[3]}
 
@@ -89,7 +120,7 @@ class Questions extends Component {
               onClick={ this.handleClick }
               data-testid={ this.dataTestIdResponsive(shuffleAnswers[0]) }
               className="question-btn"
-              disabled={ timerOver }
+              disabled={ isChoiced || timerOver }
             >
               {shuffleAnswers[0]}
             </button>
@@ -97,7 +128,7 @@ class Questions extends Component {
               onClick={ this.handleClick }
               data-testid={ this.dataTestIdResponsive(shuffleAnswers[1]) }
               className="question-btn"
-              disabled={ timerOver }
+              disabled={ isChoiced || timerOver }
             >
               {shuffleAnswers[1]}
             </button>
@@ -117,10 +148,12 @@ Questions.propTypes = {
     category: PropTypes.string,
     question: PropTypes.string,
     type: PropTypes.string,
+    difficulty: PropTypes.string,
   })).isRequired,
   shuffleAnswers: PropTypes.arrayOf(PropTypes.string).isRequired,
   timerOver: PropTypes.bool.isRequired,
   timer: PropTypes.number.isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
-export default Questions;
+export default connect()(Questions);

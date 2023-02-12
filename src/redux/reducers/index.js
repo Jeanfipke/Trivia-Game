@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { SAVE_GRAVATAR_EMAIL } from '../actions';
+import { SAVE_GRAVATAR_EMAIL, SUM_POINTS } from '../actions';
 
 const INITIAL_STATE = {
   name: '',
@@ -16,11 +16,16 @@ const reducer = (state = INITIAL_STATE, action) => {
       gravatarEmail: action.payload.gravatarEmail,
       name: action.payload.name,
     };
+  case SUM_POINTS:
+    return {
+      ...state,
+      score: state.score + action.payload,
+    };
   default:
     return state;
   }
 };
 
-const rootReducer = combineReducers({ reducer });
+const rootReducer = combineReducers({ player: reducer });
 
 export default rootReducer;

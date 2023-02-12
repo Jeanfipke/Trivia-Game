@@ -26,8 +26,8 @@ Header.propTypes = {
 };
 
 const mapStateToProps = (globalState) => ({
-  gravatarEmail: globalState.reducer.gravatarEmail,
-  name: globalState.reducer.name,
+  gravatarEmail: globalState.player.gravatarEmail,
+  name: globalState.player.name,
 });
 
 export default connect(mapStateToProps)(Header);
