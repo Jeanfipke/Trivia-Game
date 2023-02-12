@@ -24,7 +24,7 @@ class Feedback extends Component {
   };
 
   render() {
-    const { gravatarEmail, name, score } = this.props;
+    const { gravatarEmail, name, score, assertions } = this.props;
     const { feedback } = this.state;
     return (
       <div>
@@ -32,6 +32,8 @@ class Feedback extends Component {
         <img src={ `https://www.gravatar.com/avatar/${gravatarEmail}` } alt="gravat" data-testid="header-profile-picture" />
         <p data-testid="header-player-name">{name}</p>
         <p data-testid="header-score">{score}</p>
+        <p data-testid="feedback-total-score">{score}</p>
+        <p data-testid="feedback-total-question">{assertions}</p>
         <button
           // REQ 15
           data-testid="btn-play-again"
