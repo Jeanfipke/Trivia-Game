@@ -10,6 +10,7 @@ class Feedback extends Component {
   render() {
     return (
       <div>
+        <h1 data-testid="feedback-text">Feedback :D</h1>
         <button
           // REQ 15
           data-testid="btn-play-again"
