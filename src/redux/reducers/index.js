@@ -1,11 +1,13 @@
 import { combineReducers } from 'redux';
-import { SAVE_GRAVATAR_EMAIL } from '../actions';
+import { CHANGE_NEXT_VISIBLITY, RESET_SCORE, SAVE_GRAVATAR_EMAIL, SUM_ASSERTIONS,
+  SUM_POINTS } from '../actions';
 
 const INITIAL_STATE = {
   name: '',
-  assertions: '',
+  assertions: 0,
   score: 0,
   gravatarEmail: '',
+  isNextVisible: false,
 };
 
 const reducer = (state = INITIAL_STATE, action) => {
@@ -16,11 +18,31 @@ const reducer = (state = INITIAL_STATE, action) => {
       gravatarEmail: action.payload.gravatarEmail,
       name: action.payload.name,
     };
+  case SUM_POINTS:
+    return {
+      ...state,
+      score: state.score + action.payload,
+    };
+  case CHANGE_NEXT_VISIBLITY:
+    return {
+      ...state,
+      isNextVisible: action.payload,
+    };
+  case SUM_ASSERTIONS:
+    return {
+      ...state,
+      assertions: state.assertions + 1,
+    };
+  case RESET_SCORE:
+    return {
+      ...state,
+      score: 0,
+    };
   default:
     return state;
   }
 };
 
-const rootReducer = combineReducers({ reducer });
+const rootReducer = combineReducers({ player: reducer });
 
 export default rootReducer;
