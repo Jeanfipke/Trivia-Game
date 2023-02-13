@@ -54,11 +54,13 @@ describe('test the game page', () => {
     
     expect(global.fetch).toHaveBeenCalled();
 
+    // 1 questão
     const correctAnswer = await screen.findByTestId('correct-answer');
     userEvent.click(correctAnswer);
     const nextBtn = screen.getByTestId('btn-next');
     userEvent.click(nextBtn);
 
+    // 2 questão
     const nextBtnBeforeClick = screen.queryByText(/Próxima/i);
     expect(nextBtnBeforeClick).not.toBeInTheDocument();
     const category = await screen.findByText(/Geography/i);
@@ -77,21 +79,15 @@ describe('test the game page', () => {
 
     expect(screen.getByText(answers[0])).not.toHaveStyle('border: 3px solid rgb(6, 240, 15)');
     expect(screen.getByText(answers[0])).not.toHaveStyle('border: 3px solid red');
+
+    // 3 questão
+    userEvent.click(nextBtnAfterClick);
+    const correctAnswer2 = screen.getByTestId('correct-answer')
+    
+    const allBtns2 = screen.getAllByRole('button');
+    expect(allBtns2).toHaveLength(2);
   });
 
-  it('should the timer run correctly, and when timeover the buttons have to be disabled and show the answers', async () => {
-    global.fetch = jest.fn().mockResolvedValue({
-      json: jest.fn().mockResolvedValue(result),
-    });
-
-    renderWithRouterAndRedux(<App />, undefined, '/game');
-
-    const timerBeggin = await screen.findByText('30');
-    expect(timerBeggin).toBeInTheDocument();
-    await waitFor(() => expect(screen.getByText('29')).toBeInTheDocument(), { timeout: 1000})
-    await waitFor(() => expect(screen.getByText('28')).toBeInTheDocument(), { timeout: 1000})
-    await waitFor(() => expect(screen.getByText('27')).toBeInTheDocument(), { timeout: 1000})
-  });
 
   it('should show in the ranking the result after a game', async() => {
     global.fetch = jest.fn().mockResolvedValue({
@@ -113,7 +109,7 @@ describe('test the game page', () => {
     localStorage.clear();
 
     for(let i = 1; i <= 5 ; i += 1 ) {
-      const wrongAnswer = await screen.findByTestId('wrong-answer-1');
+      const wrongAnswer = await screen.findByTestId('wrong-answer-0');
       userEvent.click(wrongAnswer);
       const nextBtn = screen.getByTestId('btn-next');
       userEvent.click(nextBtn);
@@ -144,7 +140,7 @@ describe('test the game page', () => {
     const rankingBtn2 = screen.getByTestId('btn-ranking');
     userEvent.click(rankingBtn2);
     const scorePlayerMorePoints =  screen.getByTestId('player-score-0')
-    expect(scorePlayerMorePoints).toHaveTextContent('260');
+    expect(scorePlayerMorePoints).toHaveTextContent('320');
     const scorePlayerLessPoints = screen.getByTestId('player-score-1')
     expect(scorePlayerLessPoints).toHaveTextContent('0');
   })

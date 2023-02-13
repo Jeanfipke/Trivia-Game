@@ -5,6 +5,7 @@ import userEvent from '@testing-library/user-event';
 import App from '../App';
 import { renderWithRouterAndRedux } from './helpers/renderWithRouterAndRedux';
 import { act } from 'react-dom/test-utils';
+import result from './helpers/resultFetchQuestions';
 
 describe('Test the Login page', () => {
   const validEmail = 'myValidEmail@gmail.com';
@@ -43,11 +44,9 @@ describe('Test the Login page', () => {
       "token": "4110a9c44bd4cabec2fc435c8c02418d90acaaec9fcf6e4e00e50032d705b3e5"
     };
 
-    act(() => {
-      global.fetch = jest.fn().mockResolvedValue({
-        json: () => jest.fn().mockResolvedValue(mockedResult),
-      })
-    });
+      global.fetch = jest.fn(() => Promise.resolve({
+        json: () => Promise.resolve(result),
+      }));
 
     const { store, history } = renderWithRouterAndRedux(<App />);
 
@@ -57,6 +56,10 @@ describe('Test the Login page', () => {
     userEvent.type(emailInput, validEmail);
     userEvent.type(nameInput, validName);
     userEvent.click(playBtn);
+    // Linha so pra tirar o warning de act que da se tirar ( se quiser ver o erro so tirar as linhas 60,61,62)
+    act(() => {
+      history.push('/game');
+    })
     expect(global.fetch).toHaveBeenCalledWith('https://opentdb.com/api_token.php?command=request');
     await waitFor(() => {
       const state = store.getState();

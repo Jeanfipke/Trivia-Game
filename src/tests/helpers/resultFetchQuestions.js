@@ -26,15 +26,13 @@ const result = {
       ]
     },
     {
-      "category": "Entertainment: Video Games",
-      "type": "multiple",
+      "category": "General Knowledge",
+      "type": "boolean",
       "difficulty": "medium",
-      "question": "In the game &quot;Persona 4&quot;, what is the canonical name of the protagonist?",
-      "correct_answer": "Yu Narukami",
+      "question": "Furby was released in 1998.",
+      "correct_answer": "True",
       "incorrect_answers": [
-        "Chino Mashido",
-        "Tunki Sunada",
-        "Masaki Narinaka"
+        "False"
       ]
     },
     {
@@ -52,7 +50,7 @@ const result = {
     {
       "category": "Entertainment: Video Games",
       "type": "multiple",
-      "difficulty": "easy",
+      "difficulty": "hard",
       "question": "In the video game &quot;Postal 2&quot;, what is the name of Postal Dude&#039;s dog?",
       "correct_answer": "Champ",
       "incorrect_answers": [
