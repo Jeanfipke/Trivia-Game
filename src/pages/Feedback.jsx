@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { resetScore } from '../redux/actions';
 
 class Feedback extends Component {
   state = {
@@ -10,7 +11,6 @@ class Feedback extends Component {
   componentDidMount() {
     const { assertions } = this.props;
     const couldBeBetter = 3;
-    console.log(assertions);
     if (assertions < couldBeBetter) {
       this.setState({ feedback: 'Could be better...' });
     } else {
@@ -19,8 +19,13 @@ class Feedback extends Component {
   }
 
   handleFeedbackPageButtons = ({ target }) => {
-    const { history } = this.props;
-    return target.id === 'play-again' ? history.push('/') : history.push('/ranking');
+    const { history, dispatch } = this.props;
+    if (target.id === 'play-again') {
+      dispatch(resetScore());
+      history.push('/');
+    } else if (target.id === 'ranking') {
+      history.push('/ranking');
+    }
   };
 
   render() {
@@ -65,6 +70,7 @@ Feedback.propTypes = {
   name: PropTypes.string.isRequired,
   score: PropTypes.number.isRequired,
   assertions: PropTypes.number.isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (globalState) => ({

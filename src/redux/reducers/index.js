@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { CHANGE_NEXT_VISIBLITY, SAVE_GRAVATAR_EMAIL, SUM_ASSERTIONS,
+import { CHANGE_NEXT_VISIBLITY, RESET_SCORE, SAVE_GRAVATAR_EMAIL, SUM_ASSERTIONS,
   SUM_POINTS } from '../actions';
 
 const INITIAL_STATE = {
@@ -32,6 +32,11 @@ const reducer = (state = INITIAL_STATE, action) => {
     return {
       ...state,
       assertions: state.assertions + 1,
+    };
+  case RESET_SCORE:
+    return {
+      ...state,
+      score: 0,
     };
   default:
     return state;

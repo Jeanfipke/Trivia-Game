@@ -2,6 +2,7 @@ export const SAVE_GRAVATAR_EMAIL = 'SAVE_GRAVATAR_EMAIL';
 export const SUM_POINTS = 'SUM_POINTS';
 export const CHANGE_NEXT_VISIBLITY = 'CHANGE_NEXT_VISIBLITY';
 export const SUM_ASSERTIONS = 'SUM_ASSERTIONS';
+export const RESET_SCORE = 'RESET_SCORE';
 
 export const saveGravatarEmail = (payload) => ({
   type: SAVE_GRAVATAR_EMAIL,
@@ -20,4 +21,8 @@ export const changeNextVisibility = (payload) => ({
 
 export const sumAssertions = () => ({
   type: SUM_ASSERTIONS,
+});
+
+export const resetScore = () => ({
+  type: RESET_SCORE,
 });

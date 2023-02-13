@@ -1,18 +1,22 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { resetScore } from '../redux/actions';
 
 class Ranking extends Component {
   handleClick = () => {
-    const { history } = this.props;
+    const { history, dispatch } = this.props;
+    dispatch(resetScore());
     history.push('/');
   };
 
   render() {
-    const rankingList = listItens.map(() => (
-      <li key="ranking-list-item">
-        <img src="" alt="" />
-        <h5 data-testid={ `player-name-${index}` }>Nome</h5>
-        <p data-testid={ `player-score-${index}` }>Pontuação</p>
+    const ranking = JSON.parse(localStorage.getItem('ranking'));
+    const rankingList = ranking.map((item, index) => (
+      <li key={ index }>
+        <img src={ item.picture } alt={ item.name } />
+        <h5 data-testid={ `player-name-${index}` }>{item.name}</h5>
+        <p data-testid={ `player-score-${index}` }>{item.score}</p>
       </li>
     ));
 
@@ -42,6 +46,7 @@ Ranking.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
-export default Ranking;
+export default connect()(Ranking);

@@ -53,6 +53,12 @@ class Game extends Component {
     const maxIndexQuestion = 4;
     // se for a ultima pergunta vai pra feedback
     if (currQuestion === maxIndexQuestion) {
+      const { name, score, gravatarEmail } = this.props;
+      const ranking = JSON.parse(localStorage.getItem('ranking'));
+      const newRank = { name, score, picture: `https://www.gravatar.com/avatar/${gravatarEmail}` };
+      const newRanking = ranking
+        ? [...ranking, newRank].sort((a, b) => b.score - a.score) : [newRank];
+      localStorage.setItem('ranking', JSON.stringify(newRanking));
       history.push('/feedback');
     }
     // voltar ao estado inicial de timer de pergunta ja escolhida etc
@@ -119,10 +125,16 @@ Game.propTypes = {
   }).isRequired,
   isNextVisible: PropTypes.bool.isRequired,
   dispatch: PropTypes.func.isRequired,
+  name: PropTypes.string.isRequired,
+  gravatarEmail: PropTypes.string.isRequired,
+  score: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = (globalState) => ({
   isNextVisible: globalState.player.isNextVisible,
+  name: globalState.player.name,
+  score: globalState.player.score,
+  gravatarEmail: globalState.player.gravatarEmail,
 });
 
 export default connect(mapStateToProps)(Game);
