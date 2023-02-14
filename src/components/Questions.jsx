@@ -53,11 +53,9 @@ class Questions extends Component {
       case 'medium':
         dificultyPoints = medium;
         break;
-      case 'easy':
-        dificultyPoints = easy;
-        break;
 
       default:
+        dificultyPoints = easy;
         break;
       }
       const initialPoints = 10;

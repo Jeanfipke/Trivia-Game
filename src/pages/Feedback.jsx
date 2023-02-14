@@ -23,7 +23,7 @@ class Feedback extends Component {
     if (target.id === 'play-again') {
       dispatch(resetScore());
       history.push('/');
-    } else if (target.id === 'ranking') {
+    } else {
       history.push('/ranking');
     }
   };
