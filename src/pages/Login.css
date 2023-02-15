@@ -1,0 +1,84 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  font-size: 62.5%;
+}
+
+body {
+  font-family: Verdana , Geneva , Tahoma , sans-serif;
+  font-size: 1.6rem;
+}
+
+.main-login {
+  align-items: center;
+  background: no-repeat url('../images/background.svg');
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  justify-content: center;
+  width: 100vw;
+}
+
+.login-form {
+  align-items: center;
+  background-color: white;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  height: 33.3rem;
+  justify-content: center;
+  margin-bottom: 40px;
+  margin-top: 11px;
+  width: 61.4rem;
+}
+
+.login-btns {
+  border-radius: 5px;
+  height: 4.5rem;
+  margin: 11px;
+  padding-inline: 20px;
+  width: 51.9rem;
+}
+
+.play-btn {
+  background-color: rgb(47, 193, 140);
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-weight: 600;
+  height: 4.5rem;
+  margin: 11px;
+  transition: 0.1s;
+  width: 51.9rem;
+}
+
+.play-btn:disabled {
+  background-color: rgba(47, 193, 140, 0.5);
+}
+
+.play-btn:enabled:hover {
+  background-color: rgb(38, 219, 153);
+  transition: 0.3s;
+}
+
+
+.config-btn {
+  background-color: rgb(54, 145, 112);
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-weight: 600;
+  height: 4.5rem;
+  margin: 11px;
+  width: 51.9rem;
+}
+
+.config-btn:hover {
+  background-color: rgb(16, 151, 102);
+  transition: 0.3s;
+}

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { resetScore } from '../redux/actions';
+import './Feedback.css';
+import triviaLogo from '../images/logo trivia.svg';
 
 class Feedback extends Component {
   state = {
@@ -32,31 +34,51 @@ class Feedback extends Component {
     const { gravatarEmail, name, score, assertions } = this.props;
     const { feedback } = this.state;
     return (
-      <div>
-        <h1 data-testid="feedback-text">{feedback}</h1>
-        <img src={ `https://www.gravatar.com/avatar/${gravatarEmail}` } alt="gravat" data-testid="header-profile-picture" />
-        <p data-testid="header-player-name">{name}</p>
-        <p data-testid="header-score">{score}</p>
-        <p data-testid="feedback-total-score">{score}</p>
-        <p data-testid="feedback-total-question">{assertions}</p>
-        <button
+      <div className="feedback-main">
+        <img className="trivia-logo-feedback" src={ triviaLogo } alt="trivia logo" />
+        <div className="feedback-div">
+          <img className="feedBack-userPic" src={ `https://www.gravatar.com/avatar/${gravatarEmail}` } alt="gravat" data-testid="header-profile-picture" />
+          <h1 className="feedback-text" data-testid="feedback-text">{feedback}</h1>
+          <p style={ { display: 'none' } } data-testid="header-player-name">{name}</p>
+          <p style={ { display: 'none' } } data-testid="header-score">{score}</p>
+          <div style={ { display: 'flex', alignItems: 'center' } }>
+            <span>{'Você acertou '}</span>
+            <p style={ { margin: '5px' } } data-testid="feedback-total-question">
+              { assertions }
+            </p>
+            <span>{' questões!'}</span>
+          </div>
+          <div style={ { display: 'flex', alignItems: 'center' } }>
+            <span>Um total de</span>
+            <p className="score-text" data-testid="feedback-total-score">
+              { score }
+            </p>
+            <span>pontos</span>
+          </div>
+        </div>
+        <div className="feedback-btns">
+          <button
           // REQ 15
-          data-testid="btn-play-again"
-          id="play-again"
-          onClick={ this.handleFeedbackPageButtons }
-          type="button"
-        >
-          Play Again
-        </button>
-        <button
-        // REQ 16
-          data-testid="btn-ranking"
-          id="ranking"
-          onClick={ this.handleFeedbackPageButtons }
-          type="button"
-        >
-          Ver ranking
-        </button>
+            className="playagain-btn"
+            data-testid="btn-play-again"
+            id="play-again"
+            onClick={ this.handleFeedbackPageButtons }
+            type="button"
+          >
+            Play Again
+          </button>
+          <button
+            // REQ 16
+            className="ranking-btn"
+            data-testid="btn-ranking"
+            id="ranking"
+            onClick={ this.handleFeedbackPageButtons }
+            type="button"
+          >
+            Ver ranking
+          </button>
+        </div>
+        <div className="footer-feedback" />
       </div>
     );
   }

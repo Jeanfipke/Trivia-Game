@@ -1,0 +1,110 @@
+.ranking-main {
+  align-items: center;
+  background: no-repeat url('../images/background3.svg');
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  justify-content: center;
+  width: 100vw;
+}
+
+.ranking-div {
+  align-items: center;
+  background-color: white;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  height: 48.8rem;
+  justify-content: center;
+  width: 48.9rem;
+}
+
+.trivia-logo-ranking {
+  margin-bottom: 2rem;
+  margin-top: -17rem;
+  width: 17.7rem;
+}
+
+.title {
+  color: rgb(60, 27, 122);
+}
+
+.ranking {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 19.5rem;
+  margin-bottom: 10px;
+  margin-top: 20px;
+  overflow: scroll;
+  width: 45rem;
+}
+
+.player-info {
+  align-items: center;
+  display: flex;
+  font-weight: 400;
+  justify-content: center;
+  margin-left: 10px;
+}
+
+.points-text {
+  margin-left: 5px;
+}
+
+.player-score-div {
+  align-items: center;
+  background-color: rgb(235, 235, 235);
+  border-radius: 100px;
+  display: flex;
+  justify-content: space-between;
+  margin-block: 5px;
+  width: 40rem;
+}
+
+.ranking-pic {
+  border-radius: 100%;
+  margin-right: 10px;
+  width: 3.7rem;
+}
+
+.ranking-points {
+  align-items: center;
+  background-color: white;
+  border-radius: 100px;
+  box-shadow: silver 0 0 10px;
+  display: flex;
+  height: 5.5rem;
+  justify-content: center;
+  width: 18.4rem;
+}
+
+.playagain-ranking {
+  background-color: rgb(47, 193, 140);
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-weight: 700;
+  height: 4.5rem;
+  transition: 0.1s;
+  width: 38.6rem;
+}
+
+.playagain-ranking:hover {
+  background-color: rgb(33, 224, 154);
+  transition: 0.3s;
+}
+
+body::-webkit-scrollbar {
+  width: 1em;
+}
+
+body::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+}

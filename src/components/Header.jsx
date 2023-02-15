@@ -1,19 +1,28 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import './Header.css';
+import pointsStar from '../images/points_star.svg';
 
 class Header extends Component {
   render() {
     const { gravatarEmail, name, score } = this.props;
     return (
-      <div>
-        <img
-          src={ `https://www.gravatar.com/avatar/${gravatarEmail}` }
-          alt="gravatar foto"
-          data-testid="header-profile-picture"
-        />
-        <h3 data-testid="header-player-name">{name}</h3>
-        <p data-testid="header-score">{score}</p>
+      <div className="main-header">
+        <div className="header-user-info">
+          <img
+            className="user-pic"
+            src={ `https://www.gravatar.com/avatar/${gravatarEmail}` }
+            alt="gravatar foto"
+            data-testid="header-profile-picture"
+          />
+          <h3 data-testid="header-player-name">{name}</h3>
+        </div>
+        <p className="points-div" data-testid="header-score">
+          <img className="star" src={ pointsStar } alt="points star" />
+          {'Pontos: '}
+          {score}
+        </p>
       </div>
     );
   }

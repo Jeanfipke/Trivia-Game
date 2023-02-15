@@ -1,17 +1,18 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { changeNextVisibility, sumAssertions, sumPoints } from '../redux/actions';
 import './Questions.css';
+import timerIco from '../images/timer.svg';
+import logoTrivia from '../images/logo trivia.svg';
+import logoTrybe from '../images/ícone trybe.svg';
 
 class Questions extends Component {
-  // Função para tornar o data-testid responsivo
-
   componentDidUpdate() {
-    const { timerOver } = this.props;
-    if (timerOver) this.showAnswers();
+    const { timerOver, showAnswers } = this.props;
+    if (timerOver) showAnswers();
   }
 
+  // Função para tornar o data-testid responsivo
   dataTestIdResponsive = (answer) => {
     const { questions, currQuestion } = this.props;
     if (answer === questions[currQuestion].correct_answer) {
@@ -22,118 +23,108 @@ class Questions extends Component {
     return `wrong-answer-${findIncorrectAnswerIndex}`;
   };
 
-  showAnswers = () => {
-    const { questions, currQuestion } = this.props;
-    const buttons = document.querySelectorAll('.question-btn');
-    buttons.forEach((button) => {
-      if (button.textContent === questions[currQuestion].correct_answer) {
-        button.classList.add('correct-answer');
-      } else {
-        button.classList.add('wrong-answer');
-      }
-    });
-    const { dispatch } = this.props;
-    dispatch(changeNextVisibility(true));
-  };
-
-  handleClick = ({ target }) => {
-    this.showAnswers();
-    const { timer, questions, currQuestion, dispatch,
-      handleChoicedQuestion } = this.props;
-    handleChoicedQuestion();
-    if (target.className === 'question-btn correct-answer') {
-      let dificultyPoints;
-      const hard = 3;
-      const medium = 2;
-      const easy = 1;
-      switch (questions[currQuestion].difficulty) {
-      case 'hard':
-        dificultyPoints = hard;
-        break;
-      case 'medium':
-        dificultyPoints = medium;
-        break;
-
-      default:
-        dificultyPoints = easy;
-        break;
-      }
-      const initialPoints = 10;
-      const points = initialPoints + (timer * dificultyPoints);
-      dispatch(sumPoints(points));
-      dispatch(sumAssertions());
-    }
-  };
-
   render() {
     const { questions, currQuestion, shuffleAnswers, timerOver, timer,
-      isChoiced } = this.props;
+      isChoiced, isNextVisible, handleClickNext, handleClickQuestion } = this.props;
     if (questions.length === 0 || shuffleAnswers.length === 0) return 'loading...';
     return (
-      <div data-testid="answer-options">
-        <p data-testid="question-category">{questions[currQuestion].category}</p>
-        <p data-testid="question-text">{questions[currQuestion].question}</p>
+      <div className="main-questions" data-testid="main-game">
+        <div className="test">
+          <img className="logo-trivia-game" src={ logoTrivia } alt="trivia logo" />
+          <div className="question-div">
+            <p
+              className="question-category"
+              data-testid="question-category"
+            >
+              {questions[currQuestion].category}
+            </p>
+            <p
+              className="question-text"
+              data-testid="question-text"
+            >
+              {questions[currQuestion].question}
+            </p>
+            <p className="timer">
+              <img src={ timerIco } alt="timer icon" />
+              Tempo:
+              {' '}
+              { timer }
+            </p>
+          </div>
+          <img src={ logoTrybe } alt="trybe logo" />
+        </div>
         {/* Se for uma multipla escolha tem essa estrutura */}
-        { questions[currQuestion].type === 'multiple' ? (
-          <div>
-            <button
-              onClick={ this.handleClick }
-              data-testid={ this.dataTestIdResponsive(shuffleAnswers[currQuestion][0]) }
-              className="question-btn"
-              disabled={ isChoiced || timerOver }
-            >
-              {shuffleAnswers[currQuestion][0]}
-            </button>
-            <button
-              onClick={ this.handleClick }
-              data-testid={ this.dataTestIdResponsive(shuffleAnswers[currQuestion][1]) }
-              className="question-btn"
-              disabled={ isChoiced || timerOver }
-            >
-              {shuffleAnswers[currQuestion][1]}
+        <div className="answer-options">
+          { questions[currQuestion].type === 'multiple' ? (
+            <>
+              <button
+                onClick={ handleClickQuestion }
+                data-testid={ this.dataTestIdResponsive(shuffleAnswers[currQuestion][0]) }
+                className="question-btn"
+                disabled={ isChoiced || timerOver }
+              >
+                {shuffleAnswers[currQuestion][0]}
+              </button>
+              <button
+                onClick={ handleClickQuestion }
+                data-testid={ this.dataTestIdResponsive(shuffleAnswers[currQuestion][1]) }
+                className="question-btn"
+                disabled={ isChoiced || timerOver }
+              >
+                {shuffleAnswers[currQuestion][1]}
 
-            </button>
-            <button
-              onClick={ this.handleClick }
-              data-testid={ this.dataTestIdResponsive(shuffleAnswers[currQuestion][2]) }
-              className="question-btn"
-              disabled={ isChoiced || timerOver }
-            >
-              {shuffleAnswers[currQuestion][2]}
+              </button>
+              <button
+                onClick={ handleClickQuestion }
+                data-testid={ this.dataTestIdResponsive(shuffleAnswers[currQuestion][2]) }
+                className="question-btn"
+                disabled={ isChoiced || timerOver }
+              >
+                {shuffleAnswers[currQuestion][2]}
 
-            </button>
-            <button
-              onClick={ this.handleClick }
-              data-testid={ this.dataTestIdResponsive(shuffleAnswers[currQuestion][3]) }
-              className="question-btn"
-              disabled={ isChoiced || timerOver }
-            >
-              {shuffleAnswers[currQuestion][3]}
+              </button>
+              <button
+                onClick={ handleClickQuestion }
+                data-testid={ this.dataTestIdResponsive(shuffleAnswers[currQuestion][3]) }
+                className="question-btn"
+                disabled={ isChoiced || timerOver }
+              >
+                {shuffleAnswers[currQuestion][3]}
 
-            </button>
-          </div>
-        ) : (
+              </button>
+            </>
+          ) : (
           // Se for uma boolean ela retorna esse formato de questão
-          <div data-testid="answer-options">
+            <div data-testid="answer-options">
+              <button
+                onClick={ handleClickQuestion }
+                data-testid={ this.dataTestIdResponsive(shuffleAnswers[currQuestion][0]) }
+                className="question-btn"
+                disabled={ isChoiced || timerOver }
+              >
+                {shuffleAnswers[currQuestion][0]}
+              </button>
+              <button
+                onClick={ handleClickQuestion }
+                data-testid={ this.dataTestIdResponsive(shuffleAnswers[currQuestion][1]) }
+                className="question-btn"
+                disabled={ isChoiced || timerOver }
+              >
+                {shuffleAnswers[currQuestion][1]}
+              </button>
+            </div>
+          )}
+          { isNextVisible && (
             <button
-              onClick={ this.handleClick }
-              data-testid={ this.dataTestIdResponsive(shuffleAnswers[currQuestion][0]) }
-              className="question-btn"
-              disabled={ isChoiced || timerOver }
+              className="next-btn"
+              data-testid="btn-next"
+              onClick={ handleClickNext }
             >
-              {shuffleAnswers[currQuestion][0]}
+              PRÓXIMA
             </button>
-            <button
-              onClick={ this.handleClick }
-              data-testid={ this.dataTestIdResponsive(shuffleAnswers[currQuestion][1]) }
-              className="question-btn"
-              disabled={ isChoiced || timerOver }
-            >
-              {shuffleAnswers[currQuestion][1]}
-            </button>
-          </div>
-        )}
-        <p>{ timer }</p>
+          )}
+        </div>
+        <div className="footer" />
       </div>
     );
   }
@@ -152,9 +143,15 @@ Questions.propTypes = {
   shuffleAnswers: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
   timerOver: PropTypes.bool.isRequired,
   timer: PropTypes.number.isRequired,
-  dispatch: PropTypes.func.isRequired,
   isChoiced: PropTypes.bool.isRequired,
-  handleChoicedQuestion: PropTypes.func.isRequired,
+  isNextVisible: PropTypes.bool.isRequired,
+  showAnswers: PropTypes.func.isRequired,
+  handleClickNext: PropTypes.func.isRequired,
+  handleClickQuestion: PropTypes.func.isRequired,
 };
 
-export default connect()(Questions);
+const mapStateToProps = (globalState) => ({
+  isNextVisible: globalState.player.isNextVisible,
+});
+
+export default connect(mapStateToProps)(Questions);

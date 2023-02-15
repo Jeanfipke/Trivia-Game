@@ -3,7 +3,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Header from '../components/Header';
 import Questions from '../components/Questions';
-import { changeNextVisibility } from '../redux/actions';
+import { changeNextVisibility, sumAssertions, sumPoints } from '../redux/actions';
+import './Game.css';
 
 class Game extends Component {
   state = {
@@ -33,11 +34,12 @@ class Game extends Component {
   }
 
   timerFunction = () => {
-    const { timer } = this.state;
-    if (timer > 0) {
+    const { timer, isChoiced } = this.state;
+    if (timer > 0 && !isChoiced) {
       this.setState({ timer: timer - 1 });
-    } else {
+    } else if (timer <= 0 || isChoiced) {
       this.setState({ timerOver: true });
+    } else {
       clearInterval(this.count);
     }
   };
@@ -45,6 +47,49 @@ class Game extends Component {
   // tive que puxar pra ca essa logica de mudar o estado que define se eu ja selecionei alguma questão, pra poder zerar quando clickar em próximo
   handleChoicedQuestion = () => {
     this.setState({ isChoiced: true });
+  };
+
+  showAnswers = () => {
+    const { questions, currQuestion } = this.state;
+    const buttons = document.querySelectorAll('.question-btn');
+    buttons.forEach((button) => {
+      if (button.textContent === questions[currQuestion].correct_answer) {
+        button.classList.add('correct-answer');
+      } else {
+        button.classList.add('wrong-answer');
+      }
+    });
+    const { dispatch } = this.props;
+    dispatch(changeNextVisibility(true));
+  };
+
+  handleClickQuestion = ({ target }) => {
+    this.showAnswers();
+    const { timer, questions, currQuestion } = this.state;
+    const { dispatch } = this.props;
+    this.handleChoicedQuestion();
+    if (target.className === 'question-btn correct-answer') {
+      let dificultyPoints;
+      const hard = 3;
+      const medium = 2;
+      const easy = 1;
+      switch (questions[currQuestion].difficulty) {
+      case 'hard':
+        dificultyPoints = hard;
+        break;
+      case 'medium':
+        dificultyPoints = medium;
+        break;
+
+      default:
+        dificultyPoints = easy;
+        break;
+      }
+      const initialPoints = 10;
+      const points = initialPoints + (timer * dificultyPoints);
+      dispatch(sumPoints(points));
+      dispatch(sumAssertions());
+    }
   };
 
   handleClickNext = () => {
@@ -93,27 +138,23 @@ class Game extends Component {
     // a ideia é que com que passemos de uma questão pra outra mudar este currQuestion para mudar a questão que está sendo renderizada
     const { questions, currQuestion, shuffleAnswers, timer, timerOver,
       isChoiced } = this.state;
-    const { isNextVisible } = this.props;
     return (
-      <div>
+      <div className="main-game">
         <Header />
-        <Questions
-          questions={ questions }
-          currQuestion={ currQuestion }
-          shuffleAnswers={ shuffleAnswers }
-          timerOver={ timerOver }
-          timer={ timer }
-          handleChoicedQuestion={ this.handleChoicedQuestion }
-          isChoiced={ isChoiced }
-        />
-        { isNextVisible && (
-          <button
-            data-testid="btn-next"
-            onClick={ this.handleClickNext }
-          >
-            Próxima
-          </button>
-        )}
+        <div className="questions-wrap">
+          <Questions
+            questions={ questions }
+            currQuestion={ currQuestion }
+            shuffleAnswers={ shuffleAnswers }
+            timerOver={ timerOver }
+            timer={ timer }
+            handleChoicedQuestion={ this.handleChoicedQuestion }
+            isChoiced={ isChoiced }
+            handleClickNext={ this.handleClickNext }
+            handleClickQuestion={ this.handleClickQuestion }
+            showAnswers={ this.showAnswers }
+          />
+        </div>
       </div>
     );
   }
@@ -123,7 +164,6 @@ Game.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
-  isNextVisible: PropTypes.bool.isRequired,
   dispatch: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
   gravatarEmail: PropTypes.string.isRequired,
@@ -131,7 +171,6 @@ Game.propTypes = {
 };
 
 const mapStateToProps = (globalState) => ({
-  isNextVisible: globalState.player.isNextVisible,
   name: globalState.player.name,
   score: globalState.player.score,
   gravatarEmail: globalState.player.gravatarEmail,
